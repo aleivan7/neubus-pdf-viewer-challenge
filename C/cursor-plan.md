@@ -39,6 +39,7 @@ This is the plan that was produced in Cursor's Plan Mode and approved before any
 |   |-- architecture.md          # diagram, state, tradeoffs, +1 day
 |-- C/
 |   |-- cursor-plan.md           # this file
+|   |-- cursor-transcript.md     # full Plan/Agent transcript
 |   |-- ai-usage-log.md          # AI usage log
 ```
 

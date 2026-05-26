@@ -60,6 +60,39 @@ These are the meaningful edits I made on top of the first-pass AI output. They a
 
 ---
 
+## Post-build validation fixes and polish
+
+During manual testing, I found and fixed two UI issues after the first implementation pass.
+
+### Bug fix 1: Continuous scroll jumping
+
+- **Issue.** In continuous mode with **Fit Page** or **Fit Width** enabled, scrolling could feel jumpy because page-visibility updates were also triggering automatic scroll behavior.
+- **Fix.** I separated scroll-derived page updates from explicit navigation actions. `scrollIntoView` now only runs when the user intentionally navigates with **Next**, **Previous**, or the page input, instead of running during normal scroll updates.
+- **Why.** This keeps natural scrolling smooth while still allowing toolbar navigation to jump to a specific page.
+
+### Bug fix 2: Editor reorder preview
+
+- **Issue.** Moving pages up/down worked correctly in the exported PDF, but the thumbnail grid did not immediately reflect the session reorder.
+- **Fix.** I updated the thumbnail grid to render using the current session `pageOrder`, while keeping rotations tied to the source page index.
+- **Why.** The editor now previews the same order that will be saved/exported, reducing reviewer confusion.
+
+### Polish: dark mode toggle
+
+After fixing the functional issues, I added a small dark mode toggle as UI polish.
+
+- It uses CSS variables for theming.
+- It persists the selected theme in `localStorage`.
+- It respects the user's system color preference on first load.
+- It themes only the app chrome and controls.
+- It does not alter or invert PDF canvas rendering.
+
+After these changes, I reran:
+
+- `npm test`
+- `npm run build`
+
+---
+
 ## Known limitations (call them out to the reviewer)
 
 - No dedicated WebAssembly PDF engine. This MVP uses PDF.js for rendering and pdf-lib for editing. I am not claiming this as a fully WASM-backed PDF SDK. PDF.js may use WebAssembly internally for selected decoding paths depending on version and browser/runtime configuration, but this project does not rely on a WASM PDF engine for rendering or editing. The "+1 day" section of `B/architecture.md` describes the path to PDFium/WASM or a commercial SDK for redaction, annotations, signatures, widgets, bookmarks, and optimized large-document workflows.

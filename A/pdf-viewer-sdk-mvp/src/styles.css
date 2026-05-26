@@ -16,6 +16,40 @@
   --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.12);
   --radius: 6px;
   --radius-lg: 10px;
+  /* "Paper" backdrop for PDF page canvases. Stays light in both themes
+     so the rendered PDF document is never visually altered by the app. */
+  --paper: #ffffff;
+  --overlay-bg: rgba(255, 255, 255, 0.75);
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --error-text: #991b1b;
+  --danger-soft: #fef2f2;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f1419;
+  --surface: #1a1f26;
+  --surface-2: #232932;
+  --border: #2e3640;
+  --border-strong: #3f4754;
+  --text: #e6e8eb;
+  --text-muted: #9aa3ad;
+  --primary: #60a5fa;
+  --primary-hover: #93c5fd;
+  --danger: #f87171;
+  --selected-bg: #1e3a8a;
+  --selected-ring: #60a5fa;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --overlay-bg: rgba(10, 14, 18, 0.65);
+  --error-bg: #2a1212;
+  --error-border: #7f1d1d;
+  --error-text: #fca5a5;
+  --danger-soft: #2a1212;
+}
+
+:root[data-theme="dark"] .btn--active {
+  color: #ffffff;
 }
 
 * {
@@ -190,7 +224,7 @@ kbd {
 }
 
 .btn--danger:hover:not(:disabled) {
-  background: #fef2f2;
+  background: var(--danger-soft);
 }
 
 .btn--icon {
@@ -220,7 +254,8 @@ kbd {
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   padding: 4px 6px;
-  background: #fff;
+  background: var(--surface);
+  color: var(--text);
 }
 
 .input--page {
@@ -247,7 +282,7 @@ kbd {
 }
 
 .viewer__page {
-  background: var(--surface);
+  background: var(--paper);
   box-shadow: var(--shadow-md);
   border-radius: 3px;
   position: relative;
@@ -309,7 +344,7 @@ kbd {
   justify-content: center;
   width: 100%;
   min-height: 200px;
-  background: #fff;
+  background: var(--paper);
   border: 1px solid var(--border);
   border-radius: 4px;
   overflow: hidden;
@@ -381,7 +416,7 @@ kbd {
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--overlay-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -442,9 +477,9 @@ kbd {
 }
 
 .banner--error {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #991b1b;
+  background: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error-text);
 }
 
 .banner__dismiss {

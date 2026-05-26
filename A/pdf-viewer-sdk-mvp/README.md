@@ -37,16 +37,18 @@ Requirements: **Node 18+** (Node 20 LTS recommended). A modern Chromium/Firefox/
 - Navigate pages: next, previous, jump-to-page input.
 - Zoom in/out, **Fit Width**, **Fit Page**.
 - **Continuous** scroll mode or **Single** page mode.
+- Smooth continuous scrolling with current-page tracking that follows the user without fighting their scroll position.
 - High-DPI canvas rendering (uses `devicePixelRatio`).
 - Loading indicator while parsing.
 - Clear error banner on parse failures.
+- **Light / Dark theme toggle** in the header. The selected theme is persisted in `localStorage` and respects the OS-level `prefers-color-scheme` on first load. Theming applies only to the app chrome; PDF canvas rendering is unchanged.
 
 ### Document Editor
 - Toggle into **Edit Document** mode to see a thumbnail grid.
 - Click to select / unselect pages. **Shift+click** to extend a range.
 - **Rotate Left / Rotate Right** the selected pages.
 - **Delete** selected pages (refused when it would empty the doc).
-- **Move Up / Move Down** selected pages.
+- **Move Up / Move Down** selected pages, with an immediate thumbnail-grid preview that matches what will be saved or exported.
 - **Extract** selected pages into a new PDF (downloads immediately).
 - **Import / Merge** another PDF onto the end of the current document.
 - **Save** the edited PDF (downloads `-edited.pdf`).

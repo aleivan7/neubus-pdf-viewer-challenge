@@ -114,6 +114,7 @@ Re-running pdf-lib on every click would feel slow on large PDFs. We accumulate c
 - Errors and loading use `role="alert"` / `role="status"` so screen readers announce them.
 - The hidden file inputs are reached via real `<button>`s, so keyboard users can open files.
 - We avoid color-only signals: selected pages have both a border ring and a background tint.
+- Theme state is intentionally isolated from document state. Dark mode only affects the application chrome and does not modify PDF canvas rendering.
 
 ### Performance
 - Render tasks are cancellable. Rapid zoom changes do not stack pdfjs render calls on the same canvas.
@@ -126,6 +127,7 @@ Re-running pdf-lib on every click would feel slow on large PDFs. We accumulate c
 ### Reliability
 - Defensive copies of `Uint8Array` are made before handing bytes to PDF.js or Blob constructors, because some code paths can detach or share the underlying ArrayBuffer.
 - `usePdfDocument` cancels in-flight loads and destroys old proxies on unmount, preventing worker leaks.
+- Continuous scroll updates the current page from visibility tracking without forcing scroll position changes, preventing navigation state from fighting user-driven scrolling.
 
 ## 6. If I had 1 more day
 
