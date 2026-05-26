@@ -48,7 +48,8 @@ Requirements: **Node 18+** (Node 20 LTS recommended). A modern Chromium/Firefox/
 - Click to select / unselect pages. **Shift+click** to extend a range.
 - **Rotate Left / Rotate Right** the selected pages.
 - **Delete** selected pages (refused when it would empty the doc).
-- **Move Up / Move Down** selected pages, with an immediate thumbnail-grid preview that matches what will be saved or exported.
+- **Drag-and-drop thumbnail reordering** in the editor grid (drag left/right or across rows).
+- **Move Up / Move Down** controls remain available as an accessible fallback for keyboard users, with an immediate thumbnail-grid preview that matches what will be saved or exported.
 - **Extract** selected pages into a new PDF (downloads immediately).
 - **Import / Merge** another PDF onto the end of the current document.
 - **Save** the edited PDF (downloads `-edited.pdf`).
@@ -78,13 +79,14 @@ Use any non-trivial PDF (5+ pages, mixed orientations is best).
 | 10 | Switch to `Edit Document`                                                              | Thumbnail grid appears; each thumbnail has a page badge. |
 | 11 | Click thumbnails to select; Shift+click for range                                       | Selected thumbnails get the blue highlight. |
 | 12 | `Rotate Right`                                                                          | Selected thumbnails rotate 90 clockwise immediately. |
-| 13 | `Move Down` on a selected page                                                          | Page reorders in the grid. |
-| 14 | `Delete` on a selected page                                                             | Page disappears; page count drops. |
-| 15 | `Extract` on a selection                                                                | Browser downloads `<name>-extract.pdf` containing just those pages. |
-| 16 | `Import / Merge` another PDF                                                            | Document length grows by that file's page count. |
-| 17 | `Save`                                                                                  | Browser downloads `<name>-edited.pdf` with all session edits applied. |
-| 18 | Open the downloaded `-edited.pdf` in another viewer                                     | Rotations, deletions, reorders, merges are persisted. |
-| 19 | Trigger an error (e.g. open a corrupted file)                                           | Red error banner appears; the rest of the UI stays usable. |
+| 13 | Drag a thumbnail to a new position in the grid                                          | Drop indicator shows before/after target; grid updates immediately. |
+| 14 | `Move Down` on a selected page                                                          | Page reorders in the grid. |
+| 15 | `Delete` on a selected page                                                             | Page disappears; page count drops. |
+| 16 | `Extract` on a selection                                                                | Browser downloads `<name>-extract.pdf` containing just those pages. |
+| 17 | `Import / Merge` another PDF                                                            | Document length grows by that file's page count. |
+| 18 | `Save` after drag-reordering                                                            | Browser downloads `<name>-edited.pdf` with pages in the new order. |
+| 19 | Open the downloaded `-edited.pdf` in another viewer                                     | Rotations, deletions, reorders, merges are persisted. |
+| 20 | Trigger an error (e.g. open a corrupted file)                                           | Red error banner appears; the rest of the UI stays usable. |
 
 ---
 
@@ -94,7 +96,6 @@ Use any non-trivial PDF (5+ pages, mixed orientations is best).
 - **Whole-file load.** Browsers' File API gives us the bytes only after the user picks a file, so we cannot stream a linearized PDF. Very large files (hundreds of MB) may parse slowly. With a backend we would serve byte-range requests so PDF.js can fetch only the parts it needs.
 - **No annotations / form-filling / signatures / redactions.** These need a richer engine (PDFium / commercial SDK). We expose only structural edits (rotate / delete / reorder / extract / merge).
 - **Some PDF features can degrade on re-save.** pdf-lib re-serializes the document on save; it preserves most pages, fonts, and images, but complex forms, JavaScript actions, or unusual encryption may not survive a round-trip. We `ignoreEncryption: true` so owner-locked PDFs at least render.
-- **Up/Down reorder, not drag-and-drop.** The MVP uses Move Up/Move Down buttons. Drag-and-drop is a +1-day item.
 - **Print path uses the OS dialog.** No per-page selection in the print dialog beyond what the browser already gives you.
 - **No persistence.** Closing the tab loses the document.
 
