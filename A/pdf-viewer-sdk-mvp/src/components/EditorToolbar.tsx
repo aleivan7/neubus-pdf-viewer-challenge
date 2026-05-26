@@ -2,6 +2,7 @@ interface EditorToolbarProps {
   selectedCount: number;
   pageCount: number;
   disabled: boolean;
+  onExitEditor: () => void;
 
   onRotateLeft: () => void;
   onRotateRight: () => void;
@@ -20,6 +21,7 @@ export function EditorToolbar(props: EditorToolbarProps) {
     selectedCount,
     pageCount,
     disabled,
+    onExitEditor,
     onRotateLeft,
     onRotateRight,
     onDelete,
@@ -36,6 +38,16 @@ export function EditorToolbar(props: EditorToolbarProps) {
 
   return (
     <div className="toolbar toolbar--editor" role="toolbar" aria-label="Editor toolbar">
+      <button
+        type="button"
+        className="btn"
+        onClick={onExitEditor}
+        title="Exit document editor"
+      >
+        Exit Editor
+      </button>
+      <div className="toolbar__divider" />
+
       <span className="toolbar__label">
         {selectedCount} of {pageCount} selected
       </span>

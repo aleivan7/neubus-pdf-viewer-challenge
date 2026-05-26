@@ -417,7 +417,24 @@ export default function App() {
       onQuickDownload={handleDownload}
       canQuickDownload={hasDocument && !loading}
       toolbar={
-        <>
+        viewMode === "edit" && hasDocument ? (
+          <EditorToolbar
+            selectedCount={selectedPages.size}
+            pageCount={pageCount}
+            disabled={loading}
+            onExitEditor={() => setViewMode("view")}
+            onRotateLeft={handleRotateLeft}
+            onRotateRight={handleRotateRight}
+            onDelete={handleDelete}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+            onExtract={handleExtract}
+            onImportMerge={handleImportMergeClick}
+            onSave={handleSave}
+            onSelectAll={handleSelectAll}
+            onClearSelection={handleClearSelection}
+          />
+        ) : (
           <ViewerToolbar
             viewMode={viewMode}
             pageMode={pageMode}
@@ -437,24 +454,7 @@ export default function App() {
             onPrint={handlePrint}
             onDownload={handleDownload}
           />
-          {viewMode === "edit" && hasDocument && (
-            <EditorToolbar
-              selectedCount={selectedPages.size}
-              pageCount={pageCount}
-              disabled={loading}
-              onRotateLeft={handleRotateLeft}
-              onRotateRight={handleRotateRight}
-              onDelete={handleDelete}
-              onMoveUp={handleMoveUp}
-              onMoveDown={handleMoveDown}
-              onExtract={handleExtract}
-              onImportMerge={handleImportMergeClick}
-              onSave={handleSave}
-              onSelectAll={handleSelectAll}
-              onClearSelection={handleClearSelection}
-            />
-          )}
-        </>
+        )
       }
     >
       <input
