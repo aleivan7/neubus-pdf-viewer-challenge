@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { pdfjsLib, type PDFDocumentProxy } from "../utils/pdfjs";
+import { createPdfWorker, pdfjsLib, type PDFDocumentProxy } from "../utils/pdfjs";
 
 export interface UsePdfDocumentResult {
   pdfDocProxy: PDFDocumentProxy | null;
@@ -33,13 +33,14 @@ export function usePdfDocument(bytes: Uint8Array | null): UsePdfDocumentResult {
     let cancelled = false;
     let task: ReturnType<typeof pdfjsLib.getDocument> | null = null;
     let loadedProxy: PDFDocumentProxy | null = null;
+    const worker = createPdfWorker();
 
     setLoading(true);
     setError(null);
 
     // pdfjs mutates the buffer it receives in some code paths; pass a copy.
     const copy = new Uint8Array(bytes);
-    task = pdfjsLib.getDocument({ data: copy });
+    task = pdfjsLib.getDocument({ data: copy, worker });
 
     task.promise
       .then((doc) => {
@@ -75,6 +76,7 @@ export function usePdfDocument(bytes: Uint8Array | null): UsePdfDocumentResult {
           /* ignore */
         });
       }
+      worker.destroy();
     };
   }, [bytes]);
 
