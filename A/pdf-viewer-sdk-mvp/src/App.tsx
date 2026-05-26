@@ -268,6 +268,33 @@ export default function App() {
   const handleMoveDown = () => moveSelection(1);
 
   /**
+   * Apply a new display order from drag-and-drop. Selection is remapped by
+   * source page index so it survives the reorder; the dragged page stays
+   * selected even if it was not part of the prior selection.
+   */
+  const handleReorderPages = useCallback(
+    (newOrder: number[]) => {
+      const selectedSources = new Set<number>();
+      for (const displayIdx of selectedPages) {
+        const src = displayOrder[displayIdx];
+        if (src !== undefined) selectedSources.add(src);
+      }
+
+      const movedSource = findMovedSourcePage(displayOrder, newOrder);
+      if (movedSource !== null) selectedSources.add(movedSource);
+
+      const newSelected = new Set<number>();
+      newOrder.forEach((src, displayIdx) => {
+        if (selectedSources.has(src)) newSelected.add(displayIdx);
+      });
+
+      setPageOrderState(newOrder);
+      setSelectedPages(newSelected);
+    },
+    [displayOrder, selectedPages]
+  );
+
+  /**
    * Move the selected pages by `delta` positions (sign indicates direction).
    * We move them in the right order so we don't collide with ourselves.
    */
@@ -492,6 +519,7 @@ export default function App() {
           pageRotations={pageRotations}
           selectedPages={selectedPages}
           onToggleSelect={toggleSelect}
+          onReorderPages={handleReorderPages}
         />
       )}
     </AppShell>
@@ -532,6 +560,20 @@ function isIdentityOrder(order: number[]): boolean {
     if (order[i] !== i) return false;
   }
   return true;
+}
+
+/** Source page that changed display position (single-item drag reorder). */
+function findMovedSourcePage(oldOrder: number[], newOrder: number[]): number | null {
+  let moved: number | null = null;
+  for (let i = 0; i < oldOrder.length; i++) {
+    const src = oldOrder[i];
+    const newIdx = newOrder.indexOf(src);
+    if (newIdx !== i) {
+      if (moved !== null) return moved;
+      moved = src;
+    }
+  }
+  return moved;
 }
 
 /**

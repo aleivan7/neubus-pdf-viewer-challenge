@@ -91,6 +91,14 @@ After these changes, I reran:
 - `npm test`
 - `npm run build`
 
+### Polish: drag-and-drop page reordering
+
+After the initial MVP and the reorder-preview fix, I added drag-and-drop reordering to the editor thumbnail grid as a usability polish item.
+
+- Users can drag thumbnails left/right or across the grid to reorder pages visually.
+- Reorders update session `pageOrder` immediately so the grid matches what will be saved or exported.
+- **Move Up / Move Down** controls were preserved for accessibility and keyboard users.
+
 ---
 
 ## Known limitations (call them out to the reviewer)
@@ -98,7 +106,6 @@ After these changes, I reran:
 - No dedicated WebAssembly PDF engine. This MVP uses PDF.js for rendering and pdf-lib for editing. I am not claiming this as a fully WASM-backed PDF SDK. PDF.js may use WebAssembly internally for selected decoding paths depending on version and browser/runtime configuration, but this project does not rely on a WASM PDF engine for rendering or editing. The "+1 day" section of `B/architecture.md` describes the path to PDFium/WASM or a commercial SDK for redaction, annotations, signatures, widgets, bookmarks, and optimized large-document workflows.
 - **Whole-file load.** With only the local File API, we can't stream a linearized PDF. With a backend, byte-range loading would unlock that.
 - **Structural edits only.** Rotate / delete / reorder / extract / merge. No annotation, redaction, form fill, or signature.
-- **Up/Down reorder, not drag-and-drop.** DnD is deferred to "+1 day".
 - **No persistence.** Closing the tab drops the document.
 - **Some round-trips may lose niche features.** pdf-lib re-serializes the doc on save; rare PDFs with embedded JS, exotic forms, or unusual encryption may not survive cleanly.
 - **No CI workflow yet.** The repo has no `.github/workflows`. Adding one (GitHub Actions running `npm ci && npm test && npm run build`) is in the "+1 day" list and would be straightforward.
